@@ -1,0 +1,6 @@
+[submodule "dkhtodo-bakend"]
+	path = dkhtodo-bakend
+	url = git@github.com:voodoologic/todo-backend
+[submodule "dkhtodo-frontend"]
+	path = dkhtodo-frontend
+	url = git@github.com:voodoologic/todo-frontend
