@@ -17,6 +17,8 @@ Ensure you have the following installed on your system:
 ```bash
 git clone <repository-url>
 cd my-todo
+git submodule init
+git submodule update
 ```
 
 ### 2. Configure Environment Variables
@@ -55,4 +57,3 @@ docker compose exec -ti api sh -c 'python manage.py createsuperuser --username=$
 ## Frontend
 `cd dkhtodo-frontend`
 `yarn start`
-
