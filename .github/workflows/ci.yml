@@ -1,0 +1,83 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+
+jobs:
+  backend:
+    name: Backend CI
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: dkhtodo
+          POSTGRES_PASSWORD: dkhtodo
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U dkhtodo"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r dkhtodo-backend/requirements.txt
+
+      - name: Run Migrations
+        run: |
+          python dkhtodo-backend/manage.py makemigrations
+          python dkhtodo-backend/manage.py migrate
+
+      - name: Run Backend Tests
+        run: python dkhtodo-backend/manage.py test
+
+  frontend:
+    name: Frontend CI
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: yarn
+
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+        working-directory: dkhtodo-frontend
+
+      - name: Lint Code
+        run: yarn lint
+        working-directory: dkhtodo-frontend
+
+      - name: Run Frontend Tests
+        run: yarn test
+        working-directory: dkhtodo-frontend
+
+      - name: Build Frontend
+        run: yarn build
+        working-directory: dkhtodo-frontend
