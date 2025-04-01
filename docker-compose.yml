@@ -1,0 +1,37 @@
+# containerize django app, ember app, and postgres
+---
+services:
+  api:
+    build: ./dkhtodo-backend
+    volumes:
+      - ./dkhtodo-backend:/app
+    ports:
+      - "8000:8000"
+    env_file: ".env"
+    environment:
+      - DEBUG=True
+      - DATABASE_URL=postgres://${PSQL_USER:-dkhtodo}:${PSQL_PWD:-dkhtodo}@db:5432/postgres
+    depends_on:
+      - postgres
+
+  ember:
+    build: ./dkhtodo-frontend
+    volumes:
+      - ./dkhtodo-frontend:/app
+    env_file: ".env"
+    ports:
+      - "4200:4200"
+    depends_on:
+      - api
+
+  postgres:
+    image: postgres:latest
+    env_file: ".env"
+    environment:
+      POSTGRES_USER: ${PSQL_USER:-dkhtodo}
+      POSTGRES_PASSWORD: ${PSQL_PASS:-dkhtodo}
+      POSTGRES_DB: ${PSQL_DB}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:
