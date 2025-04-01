@@ -78,7 +78,7 @@ jobs:
         working-directory: dkhtodo-frontend
 
       - name: Lint Code
-        run: yarn lint
+        run: yarn lint --fix
         working-directory: dkhtodo-frontend
 
       - name: Run Frontend Tests
