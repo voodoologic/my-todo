@@ -1,6 +1,6 @@
 [submodule "dkhtodo-backend"]
 	path = dkhtodo-backend
-	url = git@github.com:voodoologic/todo-backend
+	url = https://github.com/voodoologic/todo-backend.git
 [submodule "dkhtodo-frontend"]
 	path = dkhtodo-frontend
-	url = git@github.com:voodoologic/todo-frontend
+	url = https://github.com/voodoologic/todo-frontend.git
